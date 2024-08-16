@@ -4,6 +4,41 @@ const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
+// Создание второго холста для фона "Матрицы"
+const matrixCanvas = document.createElement('canvas');
+matrixCanvas.width = canvas.width;
+matrixCanvas.height = canvas.height;
+const matrixCtx = matrixCanvas.getContext('2d');
+document.body.appendChild(matrixCanvas);
+
+// Параметры матрицы
+const matrixColumns = Math.floor(canvas.width / 20);
+const matrixDrops = [];
+const matrixSymbols = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890@#$%^&*()*&^%';
+for (let x = 0; x < matrixColumns; x++) {
+    matrixDrops[x] = Math.random() * canvas.height;
+}
+
+// Функция для рисования матрицы
+function drawMatrix() {
+    matrixCtx.fillStyle = 'rgba(0, 0, 0, 0.05)';  // Полупрозрачный черный для эффекта затухания
+    matrixCtx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+    
+    matrixCtx.fillStyle = 'rgba(0, 255, 0, 0.7)';  // Ярко-зеленый цвет с полупрозрачностью
+    matrixCtx.font = '15px monospace';
+
+    for (let i = 0; i < matrixDrops.length; i++) {
+        const text = matrixSymbols.charAt(Math.floor(Math.random() * matrixSymbols.length));
+        matrixCtx.fillText(text, i * 20, matrixDrops[i]);
+
+        if (matrixDrops[i] > canvas.height && Math.random() > 0.975) {
+            matrixDrops[i] = 0;
+        }
+
+        matrixDrops[i] += 20;
+    }
+}
+
 // Определяем размеры объектов
 const paddleWidth = canvas.width / 5;  // Ширина пэддла
 const paddleHeight = 15;
@@ -21,12 +56,12 @@ const bitcoinImg = new Image();
 bitcoinImg.src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/1200px-Bitcoin.svg.png';
 
 // Блоки
-const rowCount = 6;  // Количество строк блоков
-const blockWidth = Math.floor(canvas.width / 8);  // Ширина и высота блоков
-const blockHeight = blockWidth;  // Квадратные блоки
-const columnCount = Math.floor(canvas.width / (blockWidth + 10));  // Количество колонок блока
+const rowCount = 6;
+const blockWidth = Math.floor(canvas.width / 8);
+const blockHeight = blockWidth;
+const columnCount = Math.floor(canvas.width / (blockWidth + 10));
 const blockPadding = 10;
-const blockOffsetTop = canvas.height / 12;  // Отступ сверху для блоков
+const blockOffsetTop = canvas.height / 12;
 const blockOffsetLeft = (canvas.width - (columnCount * (blockWidth + blockPadding))) / 2;
 let blocks = [];
 
@@ -140,6 +175,10 @@ function collisionDetection() {
 
 // Обновление положения мяча и пэддла
 function update() {
+    // Рисуем фон "Матрицы"
+    drawMatrix();
+
+    // Очищаем основной холст
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     drawBlocks();
@@ -185,29 +224,29 @@ let touchX = 0;
 
 canvas.addEventListener('touchstart', function (event) {
     isTouching = true;
-    touchX = event.touches[0].clientX;
+    touchX= event.touches[0].clientX;
 });
 
-canvas.addEventListener('touchmove', function (event) {
-    touchX = event.touches[0].clientX;
+canvas.addEventListener(‘touchmove’, function (event) {
+touchX = event.touches[0].clientX;
 });
 
-canvas.addEventListener('touchend', function () {
-    isTouching = false;
+canvas.addEventListener(‘touchend’, function () {
+isTouching = false;
 });
 
-window.addEventListener('resize', function () {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    paddleX = (canvas.width - paddleWidth) / 2;
-    resetBall();
+window.addEventListener(‘resize’, function () {
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+paddleX = (canvas.width - paddleWidth) / 2;
+resetBall();
 });
 
 function resetBall() {
-    ballX = canvas.width / 2;
-    ballY = canvas.height - 50;
-    ballSpeedX = 4;
-    ballSpeedY = -4;
+ballX = canvas.width / 2;
+ballY = canvas.height - 50;
+ballSpeedX = 4;
+ballSpeedY = -4;
 }
 
 update();
