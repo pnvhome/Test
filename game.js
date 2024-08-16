@@ -21,7 +21,8 @@ bitcoinImg.src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitc
 
 const rowCount = 6;
 const blockPadding = 10;
-const blockWidth = Math.floor((gameCanvas.width - blockPadding * (rowCount + 1)) / 10); 
+const maxBlockWidth = 80;  // Максимальная ширина блока, чтобы избежать слишком больших блоков
+const blockWidth = Math.min(Math.floor((gameCanvas.width - blockPadding * (rowCount + 1)) / 10), maxBlockWidth);
 const blockHeight = blockWidth;
 const columnCount = Math.floor((gameCanvas.width - blockPadding * (rowCount + 1)) / (blockWidth + blockPadding));
 
@@ -222,6 +223,6 @@ window.addEventListener('resize', function () {
     gameCanvas.height = matrixCanvas.height = window.innerHeight;
     paddleX = (gameCanvas.width - paddleWidth) / 2;
     resetBall();
-});
+    });
 
-update();
+    update();
