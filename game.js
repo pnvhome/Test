@@ -201,26 +201,26 @@ gameCanvas.addEventListener('touchstart', function (event) {
     touchX = event.touches[0].clientX;
 });
 
-gameCanvas.addEventListener(‘touchmove’, function (event) {
+gameCanvas.addEventListener('touchmove', function (event) {
     touchX = event.touches[0].clientX;
-    });
-    
-    gameCanvas.addEventListener(‘touchend’, function () {
+});
+
+gameCanvas.addEventListener('touchend', function () {
     isTouching = false;
-    });
-    
-    window.addEventListener(‘resize’, function () {
+});
+
+window.addEventListener('resize', function () {
     gameCanvas.width = matrixCanvas.width = window.innerWidth;
     gameCanvas.height = matrixCanvas.height = window.innerHeight;
     paddleX = (gameCanvas.width - paddleWidth) / 2;
     resetBall();
-    });
-    
-    function resetBall() {
+});
+
+function resetBall() {
     ballX = gameCanvas.width / 2;
     ballY = gameCanvas.height - 50;
     ballSpeedX = 4;
     ballSpeedY = -4;
-    }
-    
-    update();
+}
+
+update();
