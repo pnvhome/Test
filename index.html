@@ -30,9 +30,17 @@
     <canvas id="matrixCanvas"></canvas>
     <canvas id="gameCanvas"></canvas>
     <script>
-        var script = document.createElement('script');
-        script.src = 'game.js?v=' + new Date().getTime();
-        document.head.appendChild(script);
+        document.addEventListener('DOMContentLoaded', function () {
+            var script = document.createElement('script');
+            script.src = 'game.js?v=' + new Date().getTime();
+            script.onload = function() {
+                console.log('game.js loaded successfully.');
+            };
+            script.onerror = function() {
+                console.error('Error loading game.js.');
+            };
+            document.head.appendChild(script);
+        });
     </script>
 </body>
 </html>
