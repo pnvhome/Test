@@ -21,7 +21,7 @@ const bitcoinImg = new Image();
 bitcoinImg.src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/1200px-Bitcoin.svg.png'; // URL значка биткоина
 
 // Блоки
-const rowCount = 5;
+const rowCount = 3;  // Количество строк блоков
 const columnCount = Math.floor(canvas.width / 100);  // Количество колонок блока остается адаптивным
 const blockWidth = (canvas.width - (columnCount - 1) * 10) / columnCount; // Подгоняем ширину блока
 const blockHeight = blockWidth / 2; // Делаем блоки более прямоугольными, с меньшей высотой
@@ -169,7 +169,7 @@ function update() {
         } else if (ballY + ballRadius > canvas.height) {  // Если мяч упал за границу поля
             lives--;
             if(lives === 0) {
-                alert('You DIED');
+                alert('You DIE Looser');
                 document.location.reload();
             } else {
                 resetBall();
@@ -211,4 +211,9 @@ window.addEventListener('resize', function() {
 
 function resetBall() {
     ballX = canvas.width / 2;
-    ballY
+    ballY = canvas.height - 50;
+    ballSpeedX = 4;
+    ballSpeedY = -4;
+}
+
+update();
