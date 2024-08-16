@@ -15,6 +15,8 @@
             position: absolute;
             top: 0;
             left: 0;
+            width: 100%;
+            height: 100%;
         }
         #matrixCanvas {
             z-index: 1;
@@ -25,11 +27,8 @@
     </style>
 </head>
 <body>
+    <canvas id="matrixCanvas"></canvas>
     <canvas id="gameCanvas"></canvas>
-    <script>
-        var script = document.createElement('script');
-        script.src = 'breakout.js?v=' + new Date().getTime();  // Используем текущее время для создания уникального URL
-        document.head.appendChild(script);
-    </script>
+    <script src="game.js"></script>
 </body>
 </html>
