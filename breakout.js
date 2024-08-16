@@ -12,7 +12,7 @@ const ballRadius = 20;
 // Позиции пэддла и мяча
 let paddleX = (canvas.width - paddleWidth) / 2;
 let ballX = canvas.width / 2;
-let ballY = canvas.height - 30;
+let ballY = canvas.height - 50;  // Изменим положение мяча, чтобы он не касался пэддла сразу
 let ballSpeedX = 5;
 let ballSpeedY = -5;
 
@@ -126,7 +126,7 @@ function update() {
             ballSpeedY = -ballSpeedY;
             ballSpeedX += Math.random() * 2 - 1; // Увеличение скорости по X при каждом отражении
             ballSpeedY *= 1.05; // Ускорение мяча по Y
-        } else {
+        } else if (ballY + ballRadius > canvas.height) {  // Если мяч упал за границу поля
             alert('Game Over');
             document.location.reload();
         }
@@ -166,7 +166,7 @@ window.addEventListener('resize', function() {
 
 function resetBall() {
     ballX = canvas.width / 2;
-    ballY = canvas.height - 30;
+    ballY = canvas.height - 50;
     ballSpeedX = 5;
     ballSpeedY = -5;
 }
