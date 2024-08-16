@@ -29,6 +29,10 @@
 <body>
     <canvas id="matrixCanvas"></canvas>
     <canvas id="gameCanvas"></canvas>
-    <script src="game.js"></script>
+    <script>
+        var script = document.createElement('script');
+        script.src = 'game.js?v=' + new Date().getTime();
+        document.head.appendChild(script);
+    </script>
 </body>
 </html>
