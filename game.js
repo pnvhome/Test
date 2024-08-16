@@ -6,8 +6,10 @@ const ctx = gameCanvas.getContext('2d');
 matrixCanvas.width = gameCanvas.width = window.innerWidth;
 matrixCanvas.height = gameCanvas.height = window.innerHeight;
 
+
 const paddleWidth = gameCanvas.width / 5;
-const paddleHeight = 15;
+const paddleHeight = 25;  // Толщина пэддла увеличена
+const paddleBottomOffset = 30;  // Дополнительный отступ от нижнего края
 const ballRadius = gameCanvas.width / 30;
 
 let paddleX = (gameCanvas.width - paddleWidth) / 2;
