@@ -1,48 +1,18 @@
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
-
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-const matrixCanvas = document.createElement('canvas');
-matrixCanvas.width = canvas.width;
-matrixCanvas.height = canvas.height;
+const matrixCanvas = document.getElementById('matrixCanvas');
 const matrixCtx = matrixCanvas.getContext('2d');
-document.body.appendChild(matrixCanvas);
+const gameCanvas = document.getElementById('gameCanvas');
+const ctx = gameCanvas.getContext('2d');
 
-const matrixColumns = Math.floor(canvas.width / 20);
-const matrixDrops = [];
-const matrixSymbols = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890@#$%^&*()*&^%';
-for (let x = 0; x < matrixColumns; x++) {
-    matrixDrops[x] = Math.random() * canvas.height;
-}
+matrixCanvas.width = gameCanvas.width = window.innerWidth;
+matrixCanvas.height = gameCanvas.height = window.innerHeight;
 
-function drawMatrix() {
-    matrixCtx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-    matrixCtx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
-    
-    matrixCtx.fillStyle = 'rgba(0, 255, 0, 0.7)';
-    matrixCtx.font = '15px monospace';
-
-    for (let i = 0; i < matrixDrops.length; i++) {
-        const text = matrixSymbols.charAt(Math.floor(Math.random() * matrixSymbols.length));
-        matrixCtx.fillText(text, i * 20, matrixDrops[i]);
-
-        if (matrixDrops[i] > canvas.height && Math.random() > 0.975) {
-            matrixDrops[i] = 0;
-        }
-
-        matrixDrops[i] += 20;
-    }
-}
-
-const paddleWidth = canvas.width / 5;
+const paddleWidth = gameCanvas.width / 5;
 const paddleHeight = 15;
-const ballRadius = canvas.width / 30;
+const ballRadius = gameCanvas.width / 30;
 
-let paddleX = (canvas.width - paddleWidth) / 2;
-let ballX = canvas.width / 2;
-let ballY = canvas.height - 60;
+let paddleX = (gameCanvas.width - paddleWidth) / 2;
+let ballX = gameCanvas.width / 2;
+let ballY = gameCanvas.height - 60;
 let ballSpeedX = 4;
 let ballSpeedY = -4;
 
@@ -50,12 +20,12 @@ const bitcoinImg = new Image();
 bitcoinImg.src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/1200px-Bitcoin.svg.png';
 
 const rowCount = 6;
-const blockWidth = Math.floor(canvas.width / 8);
+const blockWidth = Math.floor(gameCanvas.width / 10);
 const blockHeight = blockWidth;
-const columnCount = Math.floor(canvas.width / (blockWidth + 10));
+const columnCount = Math.floor(gameCanvas.width / (blockWidth + 10));
 const blockPadding = 10;
-const blockOffsetTop = canvas.height / 12;
-const blockOffsetLeft = (canvas.width - (columnCount * (blockWidth + blockPadding))) / 2;
+const blockOffsetTop = gameCanvas.height / 12;
+const blockOffsetLeft = (gameCanvas.width - (columnCount * (blockWidth + blockPadding))) / 2;
 let blocks = [];
 
 let score = 0;
@@ -120,7 +90,7 @@ function drawPaddle() {
     ctx.shadowOffsetY = 5;
 
     ctx.beginPath();
-    drawRoundedRect(ctx, paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight, 8);
+    drawRoundedRect(ctx, paddleX, gameCanvas.height - paddleHeight, paddleWidth, paddleHeight, 8);
     ctx.fillStyle = '#0095DD';
     ctx.fill();
 
@@ -135,7 +105,7 @@ function drawScore() {
     ctx.font = '16px Arial';
     ctx.fillStyle = '#ffffff';
     ctx.fillText('Score: ' + score, 8, 20);
-    ctx.fillText('Lives: ' + lives, canvas.width - 80, 20);
+    ctx.fillText('Lives: ' + lives, gameCanvas.width - 80, 20);
 }
 
 function collisionDetection() {
@@ -157,9 +127,35 @@ function collisionDetection() {
     }
 }
 
+function drawMatrix() {
+    matrixCtx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+    matrixCtx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+    
+    matrixCtx.fillStyle = 'rgba(0, 255, 0, 0.7)';
+    matrixCtx.font = '15px monospace';
+
+    for (let i = 0; i < matrixDrops.length; i++) {
+        const text = matrixSymbols.charAt(Math.floor(Math.random() * matrixSymbols.length));
+        matrixCtx.fillText(text, i * 20, matrixDrops[i]);
+
+        if (matrixDrops[i] > matrixCanvas.height && Math.random() > 0.975) {
+            matrixDrops[i] = 0;
+        }
+
+        matrixDrops[i] += 20;
+    }
+}
+
+const matrixColumns = Math.floor(matrixCanvas.width / 20);
+const matrixDrops = [];
+const matrixSymbols = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890@#$%^&*()*&^%';
+for (let x = 0; x < matrixColumns; x++) {
+    matrixDrops[x] = Math.random() * matrixCanvas.height;
+}
+
 function update() {
     drawMatrix();
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
     drawBlocks();
     drawPaddle();
     drawBall();
@@ -169,17 +165,17 @@ function update() {
     ballX += ballSpeedX;
     ballY += ballSpeedY;
 
-    if (ballX + ballRadius > canvas.width || ballX - ballRadius < 0) {
+    if (ballX + ballRadius > gameCanvas.width || ballX - ballRadius < 0) {
         ballSpeedX = -ballSpeedX;
     }
     if (ballY - ballRadius < 0) {
         ballSpeedY = -ballSpeedY;
-    } else if (ballY + ballRadius > canvas.height - paddleHeight) {
+    } else if (ballY + ballRadius > gameCanvas.height - paddleHeight) {
         if (ballX > paddleX && ballX < paddleX + paddleWidth) {
             ballSpeedY = -ballSpeedY;
             ballSpeedX += Math.random() * 2 - 1;
             ballSpeedY *= 1.05;
-        } else if (ballY + ballRadius > canvas.height) {
+        } else if (ballY + ballRadius > gameCanvas.height) {
             lives--;
             if (lives === 0) {
                 alert('Game Over');
@@ -197,34 +193,34 @@ function update() {
     requestAnimationFrame(update);
 }
 
-let isTouching = false;
-let touchX = 0;
-
-canvas.addEventListener('touchstart', function (event) {
-    isTouching = true;
-    touchX = event.touches[0].clientX;
-});
-
-canvas.addEventListener('touchmove', function (event) {
-    touchX = event.touches[0].clientX;
-});
-
-canvas.addEventListener('touchend', function () {
-    isTouching = false;
-});
-
-window.addEventListener('resize', function () {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    paddleX = (canvas.width - paddleWidth) / 2;
-    resetBall();
-});
-
 function resetBall() {
-    ballX = canvas.width / 2;
-    ballY = canvas.height - 50;
+    ballX = gameCanvas.width / 2;
+    ballY = gameCanvas.height - 50;
     ballSpeedX = 4;
     ballSpeedY = -4;
 }
+
+let isTouching = false;
+let touchX = 0;
+
+gameCanvas.addEventListener('touchstart', function (event) {
+isTouching = true;
+touchX = event.touches[0].clientX;
+});
+
+gameCanvas.addEventListener('touchmove', function (event) {
+touchX = event.touches[0].clientX;
+});
+
+gameCanvas.addEventListener('touchend', function () {
+isTouching = false;
+});
+
+window.addEventListener('resize', function () {
+gameCanvas.width = matrixCanvas.width = window.innerWidth;
+gameCanvas.height = matrixCanvas.height = window.innerHeight;
+paddleX = (gameCanvas.width - paddleWidth) / 2;
+resetBall();
+});
 
 update();
