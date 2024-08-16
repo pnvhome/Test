@@ -224,29 +224,29 @@ let touchX = 0;
 
 canvas.addEventListener('touchstart', function (event) {
     isTouching = true;
-    touchX= event.touches[0].clientX;
+    touchX = event.touches[0].clientX;
 });
 
-canvas.addEventListener(‘touchmove’, function (event) {
-touchX = event.touches[0].clientX;
+canvas.addEventListener('touchmove', function (event) {
+    touchX = event.touches[0].clientX;
 });
 
-canvas.addEventListener(‘touchend’, function () {
-isTouching = false;
+canvas.addEventListener('touchend', function () {
+    isTouching = false;
 });
 
-window.addEventListener(‘resize’, function () {
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-paddleX = (canvas.width - paddleWidth) / 2;
-resetBall();
-});
-
-function resetBall() {
-ballX = canvas.width / 2;
-ballY = canvas.height - 50;
-ballSpeedX = 4;
-ballSpeedY = -4;
-}
-
-update();
+window.addEventListener('resize', function ()) {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    paddleX = (canvas.width - paddleWidth) / 2;
+    resetBall();
+    });
+    
+    function resetBall() {
+    ballX = canvas.width / 2;
+    ballY = canvas.height - 50;
+    ballSpeedX = 4;
+    ballSpeedY = -4;
+    }
+    
+    update();
