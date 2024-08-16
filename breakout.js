@@ -5,28 +5,28 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 // Определяем размеры объектов
-const paddleWidth = canvas.width / 8;
+const paddleWidth = canvas.width / 8;  // Пэддл теперь 1/8 ширины экрана
 const paddleHeight = 15;
-const ballRadius = 15;
+const ballRadius = 15;  // Уменьшим радиус мяча
 
 // Позиции пэддла и мяча
 let paddleX = (canvas.width - paddleWidth) / 2;
 let ballX = canvas.width / 2;
 let ballY = canvas.height - 50;
-let ballSpeedX = 4;
+let ballSpeedX = 4;  // Скорость также немного уменьшена для удобства игры
 let ballSpeedY = -4;
 
 // Графические ресурсы
 const bitcoinImg = new Image();
-bitcoinImg.src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/1200px-Bitcoin.svg.png';
+bitcoinImg.src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/1200px-Bitcoin.svg.png'; // URL значка биткоина
 
 // Блоки
-const rowCount = 3;  // Уменьшили количество строк блоков
-const columnCount = Math.floor(canvas.width / 100);
-const blockWidth = (canvas.width - (columnCount - 1) * 10) / columnCount;
-const blockHeight = blockWidth / 2;
+const rowCount = 3;  // Количество строк блоков
+const columnCount = Math.floor(canvas.width / 100);  // Количество колонок блока остается адаптивным
+const blockWidth = (canvas.width - (columnCount - 1) * 10) / columnCount; // Подгоняем ширину блока
+const blockHeight = blockWidth / 2; // Делаем блоки более прямоугольными, с меньшей высотой
 const blockPadding = 10;
-const blockOffsetTop = canvas.height / 10;
+const blockOffsetTop = canvas.height / 10; // Начнем рисовать блоки немного ниже
 const blockOffsetLeft = (canvas.width - (columnCount * blockWidth + (columnCount - 1) * blockPadding)) / 2;
 let blocks = [];
 
@@ -38,14 +38,14 @@ let lives = 3;
 const blockColors = ['#FF5733', '#33FF57', '#3357FF', '#FF33A1', '#FFDD33'];
 
 // Заполнение массива блоков
-for (let c = 0; c < columnCount; c++) {
+for(let c = 0; c < columnCount; c++) {
     blocks[c] = [];
-    for (let r = 0; r < rowCount; r++) {
+    for(let r = 0; r < rowCount; r++) {
         blocks[c][r] = {
             x: 0,
             y: 0,
             status: 1,
-            color: blockColors[Math.floor(Math.random() * blockColors.length)]
+            color: blockColors[Math.floor(Math.random() * blockColors.length)] // Случайный цвет блока
         };
     }
 }
@@ -72,21 +72,23 @@ function drawBlocks() {
     ctx.shadowOffsetX = 5;
     ctx.shadowOffsetY = 5;
 
-    for (let c = 0; c < columnCount; c++) {
-        for (let r = 0; r < rowCount; r++) {
-            if (blocks[c][r].status === 1) {
+    for(let c = 0; c < columnCount; c++) {
+        for(let r = 0; r < rowCount; r++) {
+            if(blocks[c][r].status == 1) {
                 let blockX = (c * (blockWidth + blockPadding)) + blockOffsetLeft;
                 let blockY = (r * (blockHeight + blockPadding)) + blockOffsetTop;
                 blocks[c][r].x = blockX;
                 blocks[c][r].y = blockY;
 
+                // Рисуем блок со скругленными углами
                 ctx.fillStyle = blocks[c][r].color;
                 drawRoundedRect(ctx, blockX, blockY, blockWidth, blockHeight, 10);
                 ctx.fill();
             }
         }
     }
-
+    
+    // Отключаем тени после рисования блоков, чтобы они не применялись к другим элементам
     ctx.shadowColor = 'transparent';
 }
 
@@ -102,6 +104,7 @@ function drawPaddle() {
     ctx.fillStyle = '#0095DD';
     ctx.fill();
 
+    // Отключаем тени после рисования пэддла
     ctx.shadowColor = 'transparent';
 }
 
@@ -120,15 +123,15 @@ function drawScore() {
 
 // Обработка столкновения мяча с блоками
 function collisionDetection() {
-    for (let c = 0; c < columnCount; c++) {
-        for (let r = 0; r < rowCount; r++) {
+    for(let c = 0; c < columnCount; c++) {
+        for(let r = 0; r < rowCount; r++) {
             let b = blocks[c][r];
-            if (b.status === 1) {
-                if (ballX > b.x && ballX < b.x + blockWidth && ballY > b.y && ballY < b.y + blockHeight) {
+            if(b.status == 1) {
+                if(ballX > b.x && ballX < b.x + blockWidth && ballY > b.y && ballY < b.y + blockHeight) {
                     ballSpeedY = -ballSpeedY;
                     b.status = 0;
                     score++;
-                    if (score === rowCount * columnCount) {
+                    if(score == rowCount * columnCount) {
                         alert('You win!');
                         document.location.reload();
                     }
@@ -148,23 +151,25 @@ function update() {
     drawScore();
     collisionDetection();
 
+    // Движение мяча
     ballX += ballSpeedX;
     ballY += ballSpeedY;
 
-    if (ballX + ballRadius > canvas.width || ballX - ballRadius < 0) {
+    // Отражение мяча от стен
+    if(ballX + ballRadius > canvas.width || ballX - ballRadius < 0) {
         ballSpeedX = -ballSpeedX;
     }
-    if (ballY - ballRadius < 0) {
+    if(ballY - ballRadius < 0) {
         ballSpeedY = -ballSpeedY;
-    } else if (ballY + ballRadius > canvas.height - paddleHeight) {
-        if (ballX > paddleX && ballX < paddleX + paddleWidth) {
+    } else if(ballY + ballRadius > canvas.height - paddleHeight) {
+        if(ballX > paddleX && ballX < paddleX + paddleWidth) {
             ballSpeedY = -ballSpeedY;
-            ballSpeedX += Math.random() * 2 - 1;
-            ballSpeedY *= 1.05;
-        } else if (ballY + ballRadius > canvas.height) {
+            ballSpeedX += Math.random() * 2 - 1; // Увеличение скорости по X при каждом отражении
+            ballSpeedY *= 1.05; // Ускорение мяча по Y
+        } else if (ballY + ballRadius > canvas.height) {  // Если мяч упал за границу поля
             lives--;
-            if (lives === 0) {
-                alert('Game Over');
+            if(lives === 0) {
+                alert('LOOSER!!!');
                 document.location.reload();
             } else {
                 resetBall();
@@ -172,7 +177,8 @@ function update() {
         }
     }
 
-    if (isTouching) {
+    // Движение пэддла
+    if(isTouching) {
         paddleX = touchX - paddleWidth / 2;
     }
 
@@ -183,20 +189,20 @@ function update() {
 let isTouching = false;
 let touchX = 0;
 
-canvas.addEventListener('touchstart', function (event) {
+canvas.addEventListener('touchstart', function(event) {
     isTouching = true;
     touchX = event.touches[0].clientX;
 });
 
-canvas.addEventListener('touchmove', function (event) {
+canvas.addEventListener('touchmove', function(event) {
     touchX = event.touches[0].clientX;
 });
 
-canvas.addEventListener('touchend', function () {
+canvas.addEventListener('touchend', function() {
     isTouching = false;
 });
 
-window.addEventListener('resize', function () {
+window.addEventListener('resize', function() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     paddleX = (canvas.width - paddleWidth) / 2;
