@@ -20,6 +20,10 @@
 </head>
 <body>
     <canvas id="gameCanvas"></canvas>
-    <script src="breakout.js?v=1.0"></script>
+    <script>
+        var script = document.createElement('script');
+        script.src = 'breakout.js?v=' + new Date().getTime();  // Используем текущее время для создания уникального URL
+        document.head.appendChild(script);
+    </script>
 </body>
 </html>
