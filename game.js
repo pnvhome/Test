@@ -7,9 +7,12 @@ matrixCanvas.width = gameCanvas.width = window.innerWidth;
 matrixCanvas.height = gameCanvas.height = window.innerHeight;
 
 const paddleWidth = gameCanvas.width / 5;
-const paddleHeight = 25;  // Толщина пэддла увеличена
-const paddleBottomOffset = 30;  // Дополнительный отступ от нижнего края
-const ballRadius = gameCanvas.width / 30;
+const paddleHeight = 25;
+const paddleBottomOffset = 30;
+const maxBlockWidth = 30;  // Установленный вами максимальный размер блока
+const blockWidth = Math.min(Math.floor((gameCanvas.width - 10 * (6 + 1)) / 10), maxBlockWidth);
+const blockHeight = blockWidth;
+const ballRadius = blockWidth / 2;  // Уменьшение размера шарика пропорционально уменьшению блока
 
 let paddleX = (gameCanvas.width - paddleWidth) / 2;
 let ballX = gameCanvas.width / 2;
@@ -22,9 +25,6 @@ bitcoinImg.src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitc
 
 const rowCount = 6;
 const blockPadding = 10;
-const maxBlockWidth = 30;
-const blockWidth = Math.min(Math.floor((gameCanvas.width - blockPadding * (rowCount + 1)) / 10), maxBlockWidth);
-const blockHeight = blockWidth;
 const columnCount = Math.floor((gameCanvas.width - blockPadding * (rowCount + 1)) / (blockWidth + blockPadding));
 
 const blockOffsetTop = gameCanvas.height / 12;
