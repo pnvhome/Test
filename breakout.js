@@ -5,14 +5,14 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 // Определяем размеры объектов
-const paddleWidth = canvas.width / 5;  // Сделаем пэддл шире для мобильных устройств
+const paddleWidth = canvas.width / 5;  // Ширина пэддла
 const paddleHeight = 15;
-const ballRadius = canvas.width / 30;  // Радиус мяча также будет адаптирован под экран
+const ballRadius = canvas.width / 30;  // Радиус мяча
 
 // Позиции пэддла и мяча
 let paddleX = (canvas.width - paddleWidth) / 2;
 let ballX = canvas.width / 2;
-let ballY = canvas.height - 60;  // Немного увеличим отступ мяча от нижнего края
+let ballY = canvas.height - 60;  // Отступ мяча от нижнего края
 let ballSpeedX = 4;
 let ballSpeedY = -4;
 
@@ -21,13 +21,13 @@ const bitcoinImg = new Image();
 bitcoinImg.src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/1200px-Bitcoin.svg.png';
 
 // Блоки
-const rowCount = 3;  // Количество строк блоков
-const columnCount = Math.floor(canvas.width / 80);  // Увеличим количество блоков, сделав их меньше
-const blockWidth = (canvas.width - (columnCount - 1) * 10) / columnCount;
-const blockHeight = blockWidth / 3;  // Сделаем блоки более компактными
+const rowCount = 6;  // Количество строк блоков
+const blockWidth = Math.floor(canvas.width / 8);  // Ширина и высота блоков
+const blockHeight = blockWidth;  // Квадратные блоки
+const columnCount = Math.floor(canvas.width / (blockWidth + 10));  // Количество колонок блока
 const blockPadding = 10;
-const blockOffsetTop = canvas.height / 8;
-const blockOffsetLeft = (canvas.width - (columnCount * blockWidth + (columnCount - 1) * blockPadding)) / 2;
+const blockOffsetTop = canvas.height / 12;  // Отступ сверху для блоков
+const blockOffsetLeft = (canvas.width - (columnCount * (blockWidth + blockPadding))) / 2;
 let blocks = [];
 
 // Счет и жизни игрока
