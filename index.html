@@ -3,18 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bitcoin Breakout Game</title>
+    <title>Pong Game with Matrix Background</title>
     <style>
         body, html {
             margin: 0;
             padding: 0;
             overflow: hidden;
-            background: #222;
+            background: #000;
+        }
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        #matrixCanvas {
+            z-index: 1;
         }
         #gameCanvas {
-            display: block;
-            margin: 0 auto;
-            background: #333;
+            z-index: 2;
         }
     </style>
 </head>
