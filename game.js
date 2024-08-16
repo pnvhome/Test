@@ -6,7 +6,6 @@ const ctx = gameCanvas.getContext('2d');
 matrixCanvas.width = gameCanvas.width = window.innerWidth;
 matrixCanvas.height = gameCanvas.height = window.innerHeight;
 
-
 const paddleWidth = gameCanvas.width / 5;
 const paddleHeight = 25;  // Толщина пэддла увеличена
 const paddleBottomOffset = 30;  // Дополнительный отступ от нижнего края
@@ -14,7 +13,7 @@ const ballRadius = gameCanvas.width / 30;
 
 let paddleX = (gameCanvas.width - paddleWidth) / 2;
 let ballX = gameCanvas.width / 2;
-let ballY = gameCanvas.height - 60;
+let ballY = gameCanvas.height - paddleHeight - paddleBottomOffset - ballRadius;
 let ballSpeedX = 4;
 let ballSpeedY = -4;
 
@@ -23,7 +22,7 @@ bitcoinImg.src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitc
 
 const rowCount = 6;
 const blockPadding = 10;
-const maxBlockWidth = 30;  // Максимальная ширина блока, чтобы избежать слишком больших блоков
+const maxBlockWidth = 30;
 const blockWidth = Math.min(Math.floor((gameCanvas.width - blockPadding * (rowCount + 1)) / 10), maxBlockWidth);
 const blockHeight = blockWidth;
 const columnCount = Math.floor((gameCanvas.width - blockPadding * (rowCount + 1)) / (blockWidth + blockPadding));
@@ -94,7 +93,7 @@ function drawPaddle() {
     ctx.shadowOffsetY = 5;
 
     ctx.beginPath();
-    drawRoundedRect(ctx, paddleX, gameCanvas.height - paddleHeight, paddleWidth, paddleHeight, 8);
+    drawRoundedRect(ctx, paddleX, gameCanvas.height - paddleHeight - paddleBottomOffset, paddleWidth, paddleHeight, 8);
     ctx.fillStyle = '#0095DD';
     ctx.fill();
 
@@ -174,7 +173,7 @@ function update() {
     }
     if (ballY - ballRadius < 0) {
         ballSpeedY = -ballSpeedY;
-    } else if (ballY + ballRadius > gameCanvas.height - paddleHeight) {
+    } else if (ballY + ballRadius > gameCanvas.height - paddleHeight - paddleBottomOffset) {
         if (ballX > paddleX && ballX < paddleX + paddleWidth) {
             ballSpeedY = -ballSpeedY;
             ballSpeedX += Math.random() * 2 - 1;
@@ -199,7 +198,7 @@ function update() {
 
 function resetBall() {
     ballX = gameCanvas.width / 2;
-    ballY = gameCanvas.height - 50;
+    ballY = gameCanvas.height - paddleHeight - paddleBottomOffset - ballRadius;
     ballSpeedX = 4;
     ballSpeedY = -4;
 }
@@ -225,6 +224,6 @@ window.addEventListener('resize', function () {
     gameCanvas.height = matrixCanvas.height = window.innerHeight;
     paddleX = (gameCanvas.width - paddleWidth) / 2;
     resetBall();
-    });
+});
 
-    update();
+update();
