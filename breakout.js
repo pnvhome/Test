@@ -4,17 +4,17 @@ const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-// Размеры пэддла и мяча
-const paddleWidth = canvas.width / 6; // Пэддл составляет 1/6 ширины экрана
-const paddleHeight = 20;
-const ballRadius = 20;
+// Определяем размеры объектов
+const paddleWidth = canvas.width / 8;  // Пэддл теперь 1/8 ширины экрана
+const paddleHeight = 15;
+const ballRadius = 15;  // Уменьшим радиус мяча
 
 // Позиции пэддла и мяча
 let paddleX = (canvas.width - paddleWidth) / 2;
 let ballX = canvas.width / 2;
 let ballY = canvas.height - 50;
-let ballSpeedX = 5;
-let ballSpeedY = -5;
+let ballSpeedX = 4;  // Скорость также немного уменьшена для удобства игры
+let ballSpeedY = -4;
 
 // Графические ресурсы
 const bitcoinImg = new Image();
@@ -22,11 +22,11 @@ bitcoinImg.src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitc
 
 // Блоки
 const rowCount = 5;
-const columnCount = Math.floor(canvas.width / 100); // Подгоняем количество блоков по ширине экрана
+const columnCount = Math.floor(canvas.width / 100);  // Количество колонок блока остается адаптивным
 const blockWidth = (canvas.width - (columnCount - 1) * 10) / columnCount; // Подгоняем ширину блока
-const blockHeight = blockWidth; // Делаем блоки квадратными
+const blockHeight = blockWidth / 2; // Делаем блоки более прямоугольными, с меньшей высотой
 const blockPadding = 10;
-const blockOffsetTop = 50;
+const blockOffsetTop = canvas.height / 10; // Начнем рисовать блоки немного ниже
 const blockOffsetLeft = (canvas.width - (columnCount * blockWidth + (columnCount - 1) * blockPadding)) / 2;
 let blocks = [];
 
@@ -50,8 +50,28 @@ for(let c = 0; c < columnCount; c++) {
     }
 }
 
+// Функция для рисования прямоугольников со скругленными углами
+function drawRoundedRect(ctx, x, y, width, height, radius) {
+    ctx.beginPath();
+    ctx.moveTo(x + radius, y);
+    ctx.lineTo(x + width - radius, y);
+    ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+    ctx.lineTo(x + width, y + height - radius);
+    ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+    ctx.lineTo(x + radius, y + height);
+    ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+    ctx.lineTo(x, y + radius);
+    ctx.quadraticCurveTo(x, y, x + radius, y);
+    ctx.closePath();
+}
+
 // Рисуем блоки
 function drawBlocks() {
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+    ctx.shadowBlur = 10;
+    ctx.shadowOffsetX = 5;
+    ctx.shadowOffsetY = 5;
+
     for(let c = 0; c < columnCount; c++) {
         for(let r = 0; r < rowCount; r++) {
             if(blocks[c][r].status == 1) {
@@ -59,23 +79,33 @@ function drawBlocks() {
                 let blockY = (r * (blockHeight + blockPadding)) + blockOffsetTop;
                 blocks[c][r].x = blockX;
                 blocks[c][r].y = blockY;
-                ctx.beginPath();
-                ctx.rect(blockX, blockY, blockWidth, blockHeight);
+
+                // Рисуем блок со скругленными углами
                 ctx.fillStyle = blocks[c][r].color;
+                drawRoundedRect(ctx, blockX, blockY, blockWidth, blockHeight, 10);
                 ctx.fill();
-                ctx.closePath();
             }
         }
     }
+    
+    // Отключаем тени после рисования блоков, чтобы они не применялись к другим элементам
+    ctx.shadowColor = 'transparent';
 }
 
 // Рисуем пэддл
 function drawPaddle() {
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+    ctx.shadowBlur = 10;
+    ctx.shadowOffsetX = 5;
+    ctx.shadowOffsetY = 5;
+
     ctx.beginPath();
-    ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
+    drawRoundedRect(ctx, paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight, 10);
     ctx.fillStyle = '#0095DD';
     ctx.fill();
-    ctx.closePath();
+
+    // Отключаем тени после рисования пэддла
+    ctx.shadowColor = 'transparent';
 }
 
 // Рисуем мяч
@@ -139,7 +169,7 @@ function update() {
         } else if (ballY + ballRadius > canvas.height) {  // Если мяч упал за границу поля
             lives--;
             if(lives === 0) {
-                alert('Game Over');
+                alert('You DIED');
                 document.location.reload();
             } else {
                 resetBall();
@@ -181,9 +211,4 @@ window.addEventListener('resize', function() {
 
 function resetBall() {
     ballX = canvas.width / 2;
-    ballY = canvas.height - 50;
-    ballSpeedX = 5;
-    ballSpeedY = -5;
-}
-
-update();
+    ballY
