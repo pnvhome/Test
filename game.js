@@ -20,10 +20,11 @@ const bitcoinImg = new Image();
 bitcoinImg.src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/1200px-Bitcoin.svg.png';
 
 const rowCount = 6;
-const blockWidth = Math.floor(gameCanvas.width / 10);
-const blockHeight = blockWidth;
-const columnCount = Math.floor(gameCanvas.width / (blockWidth + 10));
 const blockPadding = 10;
+const blockWidth = Math.floor((gameCanvas.width - blockPadding * (rowCount + 1)) / 10); 
+const blockHeight = blockWidth;
+const columnCount = Math.floor((gameCanvas.width - blockPadding * (rowCount + 1)) / (blockWidth + blockPadding));
+
 const blockOffsetTop = gameCanvas.height / 12;
 const blockOffsetLeft = (gameCanvas.width - (columnCount * (blockWidth + blockPadding))) / 2;
 let blocks = [];
@@ -204,23 +205,23 @@ let isTouching = false;
 let touchX = 0;
 
 gameCanvas.addEventListener('touchstart', function (event) {
-isTouching = true;
-touchX = event.touches[0].clientX;
+    isTouching = true;
+    touchX = event.touches[0].clientX;
 });
 
 gameCanvas.addEventListener('touchmove', function (event) {
-touchX = event.touches[0].clientX;
+    touchX = event.touches[0].clientX;
 });
 
 gameCanvas.addEventListener('touchend', function () {
-isTouching = false;
+    isTouching = false;
 });
 
 window.addEventListener('resize', function () {
-gameCanvas.width = matrixCanvas.width = window.innerWidth;
-gameCanvas.height = matrixCanvas.height = window.innerHeight;
-paddleX = (gameCanvas.width - paddleWidth) / 2;
-resetBall();
+    gameCanvas.width = matrixCanvas.width = window.innerWidth;
+    gameCanvas.height = matrixCanvas.height = window.innerHeight;
+    paddleX = (gameCanvas.width - paddleWidth) / 2;
+    resetBall();
 });
 
 update();
